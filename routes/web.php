@@ -14,3 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group(['prefix' => 'photo'], function () {
+    Route::get('upload', 'PhotoController@uploadForm');
+    Route::post('upload', 'PhotoController@upload');
+});
