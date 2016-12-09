@@ -17,8 +17,8 @@ class PhotoController extends Controller
     public function upload()
     {
         if ($file = request()->file('photo')) {
-            $path = $file->storeAs('photos', Uuid::uuid() . '.' . $file->guessClientExtension());
-            return asset($path);
+            $path = $file->storeAs('public', Uuid::uuid() . '.' . $file->guessClientExtension());
+            return str_replace('public', 'storage', asset($path));
         }
 
         return [
