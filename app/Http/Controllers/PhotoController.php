@@ -45,7 +45,9 @@ class PhotoController extends Controller
                     return $e;
                 }
             }
-
+            if (is_string($faceInfo)) {
+                $faceInfo = json_decode($faceInfo, true);
+            }
             return compact('faceInfo', 'faceFamilia', 'user');
         }
 
