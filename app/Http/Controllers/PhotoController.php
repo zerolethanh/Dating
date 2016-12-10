@@ -67,7 +67,7 @@ class PhotoController extends Controller
             return get_defined_vars();
         }
         $error = 'photo filename is not valid';
-        return get_defined_functions();
+        return get_defined_vars();
     }
 
     public function getFaceAPI($path)
