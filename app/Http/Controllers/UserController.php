@@ -10,8 +10,12 @@ class UserController extends Controller
     //
     public function email($email)
     {
-        return User::where('email', $email)->first();
-
+        $res = ['exists' => false, '_token' => session('_token')];
+        if ($user = User::where('email', $email)->first()) {
+            $res['exists'] = true;
+            $res['user'] = $user;
+        }
+        return $res;
     }
 
     public function all()
