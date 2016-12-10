@@ -33,6 +33,10 @@ class PhotoController extends Controller
 //            $faceIdList = "f114c8e1-394d-45ec-88ec-13c96dbbb053, aa24f7da-a1c1-4834-bb94-f9c907c7ee54, 49d77c8d-8b1c-4cf2-9600-6ccafa0b1c39,2aa863b0-faaa-44c8-b319-9848a87d71ac";
 //            $faceFamilia = $this->getFaceFimiliar($faceId, $faceIdList);
 
+            if (is_string($faceInfo)) {
+                $faceInfo = json_decode($faceInfo, true);
+            }
+
             if ($email = request('EMAIL')) {
                 $user = User::where('EMAIL', $email)->first();
                 try {
@@ -45,9 +49,7 @@ class PhotoController extends Controller
                     return $e;
                 }
             }
-            if (is_string($faceInfo)) {
-                $faceInfo = json_decode($faceInfo, true);
-            }
+
             return get_defined_vars();
         }
 
