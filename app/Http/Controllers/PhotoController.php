@@ -21,13 +21,17 @@ class PhotoController extends Controller
 
     public function upload()
     {
+        $uploaded = false;
         if ($file = request()->file('photo')) {
             $path = $file->storeAs('public', Uuid::uuid() . '.' . $file->guessClientExtension());
 
             $realPath = str_replace('public', 'storage', asset($path));
 
 //            return $realPath;
-            $faceInfo = $this->getFaceAPI($realPath);
+            $faceInfo = $this->getFaceAPI(
+                $realPath
+//                "http://133.242.226.127:2345/storage/d3bf5797-2f81-38cd-87e2-8330a53bdb22.png"
+            );
 
 //            $faceId = "7f03ba8d-22d7-4976-847f-c9da0bd1a1bf";
 //            $faceIdList = "f114c8e1-394d-45ec-88ec-13c96dbbb053, aa24f7da-a1c1-4834-bb94-f9c907c7ee54, 49d77c8d-8b1c-4cf2-9600-6ccafa0b1c39,2aa863b0-faaa-44c8-b319-9848a87d71ac";
@@ -37,9 +41,11 @@ class PhotoController extends Controller
                 $faceInfo = json_decode($faceInfo, true);
             }
 
+//            dd($faceInfo);
+            $userInfoUpdated = false;
             if ($email = request('EMAIL')) {
                 $user = User::where('EMAIL', $email)->first();
-                if ($user) {
+                if ($user && count($faceInfo)) {
                     try {
 //                    dd($faceInfo);
 //                        dd($faceInfo[0]["faceId"]);
@@ -50,19 +56,18 @@ class PhotoController extends Controller
                         $user->RECENTJOINTIME = date('Y-m-d H:i:s');
 
                         $user->save();
+                        $userInfoUpdated = true;
                     } catch (\Exception $e) {
                         return $e;
                     }
                 }
             }
+            $uploaded = true;
 
             return get_defined_vars();
         }
-
-
-        return [
-            'msg' => 'file photo not found on request'
-        ];
+        $error = 'photo filename is not valid';
+        return get_defined_functions();
     }
 
     public function getFaceAPI($path)
