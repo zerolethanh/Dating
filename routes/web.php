@@ -19,3 +19,10 @@ Route::group(['prefix' => 'photo'], function () {
     Route::get('upload', 'PhotoController@uploadForm');
     Route::post('upload', 'PhotoController@upload');
 });
+
+Route::group(['prefix' => 'user'], function () {
+
+    Route::get('email/{email}', 'UserController@email');
+    Route::get('all', 'UserController@all');
+
+});
