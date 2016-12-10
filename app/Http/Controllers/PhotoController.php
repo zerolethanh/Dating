@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
 {
-
+    const MAPPING_AGE = 3;
+    const MALE = "MALE";
+    const FEMALE= "FEMALE";
     //
     public function uploadForm()
     {
@@ -111,6 +113,59 @@ class PhotoController extends Controller
         {
             echo $ex;
         }
+    }
+
+
+
+    function getListFacesData() {
+        $facesData = array();
+        $facesData = User::all();
+        return $facesData;
+    }
+
+    function isMappingUser($own, $other) {
+        $isMap = false;
+        $diff_age = $own["AGE"] - $other["AGE"];
+        if (abs($diff_age) <= MAPPING_AGE) {
+            $isMap = true;
+        }
+        if($isMap){
+            if($own["GENDER"] == MALE || $own["GENDER" == FEMALE]){
+                if($own["GENDER"] == $other["GENDER"]){
+                    $isMap = false;
+                }
+            }
+
+        }
+        else
+        {
+            $isMap = true;
+        }
+        return false;
+    }
+
+    function isSameUser($own, $other) {
+        $same = true;
+        foreach ($own as $key => $value) {
+            if($other[$key] != $value){
+                $same = false;
+            }
+        }
+        return $same;
+    }
+
+    function getListUsersSuggestion($own) {
+        $usersSuggest = array();
+        $usersList = getListFacesData();
+        foreach ($usersList as $key => $other) {
+            if(isSameUser($own, $other)){
+                continue;
+            }
+            if(isMappingUser($own, $other)){
+                $usersSuggest[$key] = $other;
+            }
+        }
+        return $usersSuggest;
     }
 
 }
