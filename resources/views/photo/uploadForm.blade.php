@@ -13,6 +13,7 @@
         <form action="/photo/upload" method="post" enctype="multipart/form-data">
             {{ csrf_field() }}
             <input type="file" name="photo">
+            <input type="email" name="EMAIL">
             <button type="submit">Upload</button>
         </form>
 </body>
