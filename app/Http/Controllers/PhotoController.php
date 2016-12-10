@@ -48,7 +48,7 @@ class PhotoController extends Controller
             if (is_string($faceInfo)) {
                 $faceInfo = json_decode($faceInfo, true);
             }
-            return compact('faceInfo', 'faceFamilia', 'user');
+            return get_defined_vars();
         }
 
 
