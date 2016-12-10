@@ -19,22 +19,28 @@ class PhotoController extends Controller
         if ($file = request()->file('photo')) {
             $path = $file->storeAs('public', Uuid::uuid() . '.' . $file->guessClientExtension());
 
-            $this->getFaceAPI($path);
-            return str_replace('public', 'storage', asset($path));
+            $realPath = str_replace('public', 'storage', asset($path));
+
+//            return $realPath;
+            $faceInfo = $this->getFaceAPI($realPath);
+
+            return $faceInfo;
         }
 
         return [
             'msg' => 'file photo not found on request'
         ];
     }
-    public function getFaceAPI($path){
-        $request = new Http_Request2('https://api.projectoxford.ai/face/v1.0/detect');
+
+    public function getFaceAPI($path)
+    {
+        $request = new \HTTP_Request2('https://api.projectoxford.ai/face/v1.0/detect');
         $url = $request->getUrl();
 
         $headers = array(
             // Request headers
             'Content-Type' => 'application/json',
-            'Ocp-Apim-Subscription-Key' => '{2968a3fde555436aad8348f13a82a108}',
+            'Ocp-Apim-Subscription-Key' => '2968a3fde555436aad8348f13a82a108',
         );
 
         $request->setHeader($headers);
@@ -43,24 +49,23 @@ class PhotoController extends Controller
             // Request parameters
             'returnFaceId' => 'true',
             'returnFaceLandmarks' => 'false',
-            'returnFaceAttributes' => '{age,gender}',
+            'returnFaceAttributes' => 'age,gender',
         );
 
         $url->setQueryVariables($parameters);
 
-        $request->setMethod(HTTP_Request2::METHOD_POST);
+        $request->setMethod(\HTTP_Request2::METHOD_POST);
 
 // Request body
-        $request->setBody("{url:http://topanhdep.net/wp-content/uploads/2015/12/anh-girl-xinh-gai-dep-98-18.jpg}");
+        $request->setBody("{\"url\": \"$path\"}");
 
-        try
-        {
+//        dd($request);
+
+        try {
             $response = $request->send();
-            echo $response->getBody();
-        }
-        catch (HttpException $ex)
-        {
-            echo $ex;
+            return $response->getBody();
+        } catch (\HttpException $ex) {
+            return $ex;
         }
     }
 
