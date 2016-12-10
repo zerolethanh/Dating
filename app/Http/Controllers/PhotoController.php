@@ -27,7 +27,9 @@ class PhotoController extends Controller
             $realPath = str_replace('public', 'storage', asset($path));
 
 //            return $realPath;
-            $faceInfo = $this->getFaceAPI($realPath);
+            $faceInfo = $this->getFaceAPI(
+                "http://133.242.226.127:2345/storage/0369b5cd-82c3-382d-a1d4-339fe5466a86.png"
+            );
 
 //            $faceId = "7f03ba8d-22d7-4976-847f-c9da0bd1a1bf";
 //            $faceIdList = "f114c8e1-394d-45ec-88ec-13c96dbbb053, aa24f7da-a1c1-4834-bb94-f9c907c7ee54, 49d77c8d-8b1c-4cf2-9600-6ccafa0b1c39,2aa863b0-faaa-44c8-b319-9848a87d71ac";
@@ -39,14 +41,20 @@ class PhotoController extends Controller
 
             if ($email = request('EMAIL')) {
                 $user = User::where('EMAIL', $email)->first();
-                try {
-                    $user->FACEID = $faceInfo["faceId"];
-                    $user->AGE = $faceInfo['faceAttributes']['age'];
-                    $user->GENDER = $faceInfo['faceAttributes']['gender'];
+                if ($user) {
+                    try {
+//                    dd($faceInfo);
+//                        dd($faceInfo[0]["faceId"]);
+                        $user->FACEID = $faceInfo[0]["faceId"];
+                        $user->AGE = $faceInfo[0]['faceAttributes']['age'];
+                        $user->GENDER = strtoupper($faceInfo[0]['faceAttributes']['gender']);
+                        $user->IMAGE = $realPath;
+                        $user->RECENTJOINTIME = date('Y-m-d H:i:s');
 
-                    $user->save();
-                } catch (\Exception $e) {
-                    return $e;
+                        $user->save();
+                    } catch (\Exception $e) {
+                        return $e;
+                    }
                 }
             }
 
