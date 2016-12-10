@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Schema;
 
 class UserController extends Controller
 {
+    static $isNewUser = false;
+
     //
     public function email($email)
     {
@@ -15,6 +17,7 @@ class UserController extends Controller
         if ($user = User::where('EMAIL', $email)->first()) {
             $res['exists'] = true;
             $res['user'] = $user;
+            $res['isNewUser'] = static::$isNewUser;
         }
         return $res;
     }
@@ -29,19 +32,14 @@ class UserController extends Controller
         $user = User::where('EMAIL', request('EMAIL'));
 
         if (!$user->exists()) {
-//            dd(request()->all());
-//            dd(Schema::getColumnListing('USERS'));
-//            $data = array_only(request()->all(), Schema::getColumnListing('USERS'));
-//            unset($data['EMAIL']);
-//            if (count($data)) {
-//                $user->update($data);
-//            }
+            //登録
             User::create(
                 [
                     'EMAIL' => request('EMAIL'),
                     'STARTTIME' => date('Y-m-d H:i:s'),
                 ]
             );
+            static::$isNewUser = true;
         }
 
         return $this->email(request('EMAIL'));
