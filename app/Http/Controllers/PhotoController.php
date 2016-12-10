@@ -199,4 +199,32 @@ class PhotoController extends Controller
         return $usersSuggest;
     }
 
+    function suggestion()
+    {
+//        $own = User::where('EMAIL', request('EMAIl'))->first();
+        $own = User::where('EMAIL', 'thanh@gmail.com')->first()->toArray();
+//        dd($own);
+        return $this->getListUsersSuggestion($own);
+    }
+
+    function sug()
+    {
+//        $own = User::where('EMAIL', 'thanh@gmail.com')->first()->toArray();
+        $own = User::where('EMAIL', request('EMAIL'))->first()->toArray();
+
+        $sugList = User::where('GENDER', '<>', $own['GENDER'])
+            ->where(function ($q) use ($own) {
+                $q->where('AGE', '>=', $own["AGE"] - 3)
+                    ->orWhere('AGE', '<=', $own["AGE"] + 3);
+            }
+            )->get();
+
+
+        return $sugList;
+    }
+
+    function sugForm(){
+        return view('photo.sugForm');
+    }
+
 }
