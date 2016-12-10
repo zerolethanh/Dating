@@ -25,4 +25,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('email/{email}', 'UserController@email');
     Route::get('all', 'UserController@all');
 
+    //register
+    Route::get('reg-email-form','UserController@regEmailForm');
+    Route::post('reg-email','UserController@regEmail');
 });
