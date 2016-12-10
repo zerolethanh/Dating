@@ -43,22 +43,24 @@ class PhotoController extends Controller
 
 //            dd($faceInfo);
             $userInfoUpdated = false;
-            if ($email = request('EMAIL')) {
-                $user = User::where('EMAIL', $email)->first();
-                if ($user && count($faceInfo)) {
-                    try {
+            if ($faceInfoCount = count($faceInfo)) {
+                if ($email = request('EMAIL')) {
+                    $user = User::where('EMAIL', $email)->first();
+                    if ($user) {
+                        try {
 //                    dd($faceInfo);
 //                        dd($faceInfo[0]["faceId"]);
-                        $user->FACEID = $faceInfo[0]["faceId"];
-                        $user->AGE = $faceInfo[0]['faceAttributes']['age'];
-                        $user->GENDER = strtoupper($faceInfo[0]['faceAttributes']['gender']);
-                        $user->IMAGE = $realPath;
-                        $user->RECENTJOINTIME = date('Y-m-d H:i:s');
+                            $user->FACEID = $faceInfo[0]["faceId"];
+                            $user->AGE = $faceInfo[0]['faceAttributes']['age'];
+                            $user->GENDER = strtoupper($faceInfo[0]['faceAttributes']['gender']);
+                            $user->IMAGE = $realPath;
+                            $user->RECENTJOINTIME = date('Y-m-d H:i:s');
 
-                        $user->save();
-                        $userInfoUpdated = true;
-                    } catch (\Exception $e) {
-                        return $e;
+                            $user->save();
+                            $userInfoUpdated = true;
+                        } catch (\Exception $e) {
+                            return $e;
+                        }
                     }
                 }
             }
