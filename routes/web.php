@@ -40,5 +40,6 @@ Route::group([
 ], function () {
     Route::get('send', 'RequestController@request');
     Route::get('pull', 'RequestController@pull');
+    Route::get('accept','RequestController@accept');
     Route::get('is-accepted', 'RequestController@is_accepted');
 });

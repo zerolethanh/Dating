@@ -50,4 +50,13 @@ class RequestController extends Controller
         }
         return get_defined_vars();
     }
+
+    function accept()
+    {
+        $r = \App\Request::find(request('id'));
+        $r->accepted = 1;
+        $r->save();
+
+        return get_defined_vars();
+    }
 }
