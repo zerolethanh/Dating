@@ -19,8 +19,8 @@ Route::group(['prefix' => 'photo'], function () {
     Route::get('upload', 'PhotoController@uploadForm');
     Route::post('upload', 'PhotoController@upload');
 //    Route::get('sug','PhotoController@suggestion');
-    Route::get('sug','PhotoController@sug');
-    Route::get('sug-form','PhotoController@sugForm');
+    Route::get('sug', 'PhotoController@sug');
+    Route::get('sug-form', 'PhotoController@sugForm');
 
 });
 
@@ -33,6 +33,10 @@ Route::group(['prefix' => 'user'], function () {
     //register
     Route::get('reg-email-form', 'UserController@regEmailForm');
     Route::post('reg-email', 'UserController@regEmail');
+});
 
-
+Route::group([
+    'prefix' => 'req'
+], function () {
+    Route::get('send', 'RequestController@request');
 });
