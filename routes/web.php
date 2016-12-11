@@ -39,4 +39,5 @@ Route::group([
     'prefix' => 'req'
 ], function () {
     Route::get('send', 'RequestController@request');
+    Route::get('pull', 'RequestController@pull');
 });
